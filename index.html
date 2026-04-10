@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Griffin Sisk</title>
+  <link rel="icon" href="assets/img/favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #1d1d1f;
+      --fg:     #ffffff;
+      --muted:  #9ba1a5;
+      --dim:    rgba(255,255,255,0.08);
+      --accent: #00d4b4;
+      --font:   'Geist', -apple-system, sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font);
+      font-size: 16px;
+      line-height: 140%;
+      font-weight: 400;
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── LAYOUT ───────────────────────────────── */
+    .wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 64px;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--dim);
+    }
+
+    /* ── HEADER ───────────────────────────────── */
+    header {
+      padding: 24px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0;
+      color: var(--fg);
+    }
+
+    #clock {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: 0.4px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ── NAV ──────────────────────────────────── */
+    nav {
+      padding: 20px 0;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1em;
+      color: var(--muted);
+      letter-spacing: 0;
+      transition: color 0.12s;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    nav a:hover { color: var(--fg); }
+    nav a.active { color: var(--fg); }
+
+    nav .ext::after {
+      content: ' ↗';
+      font-size: 10px;
+      opacity: 0.5;
+    }
+
+    nav .sep {
+      width: 1px;
+      height: 12px;
+      background: var(--dim);
+      flex-shrink: 0;
+    }
+
+    /* ── HERO ─────────────────────────────────── */
+    .hero {
+      padding: 64px 0 60px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      grid-template-rows: auto auto;
+      gap: 0 44px;
+    }
+
+    /* Name spans left column, both rows */
+    .hero-name {
+      grid-column: 1;
+      grid-row: 1;
+      font-size: clamp(52px, 7.5vw, 108px);
+      font-weight: 600;
+      line-height: 1.2em;
+      letter-spacing: -0.03em;
+      color: var(--fg);
+      align-self: end;
+      padding-bottom: 32px;
+    }
+
+    .hero-name span { color: var(--accent); }
+
+    /* Photo spans right column, row 1 */
+    .hero-photo {
+      grid-column: 2;
+      grid-row: 1;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Chromatic aberration: 3 channel layers */
+    .hero-photo .ch-r,
+    .hero-photo .ch-g,
+    .hero-photo .ch-b {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+      display: block;
+      mix-blend-mode: screen;
+    }
+
+    /* Red channel — shift left */
+    .hero-photo .ch-r {
+      filter: url(#ch-red) grayscale(0%);
+      transform: translate(-3px, -1px);
+      z-index: 1;
+    }
+
+    /* Green channel — center, slightly transparent */
+    .hero-photo .ch-g {
+      filter: url(#ch-green) grayscale(0%);
+      transform: translate(0px, 0px);
+      opacity: 0.9;
+      z-index: 2;
+    }
+
+    /* Blue channel — shift right */
+    .hero-photo .ch-b {
+      filter: url(#ch-blue) grayscale(0%);
+      transform: translate(3px, 1px);
+      z-index: 3;
+    }
+
+    /* Remove old pseudo-element styles */
+    .hero-photo::before,
+    .hero-photo::after { display: none; }
+
+    /* Tagline sits left column, row 2 */
+    .hero-tagline {
+      grid-column: 1;
+      grid-row: 2;
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--muted);
+      line-height: 140%;
+      letter-spacing: 0px;
+      max-width: 400px;
+      padding-top: 4px;
+    }
+
+    /* Meta sits right column, row 2 */
+    .hero-meta {
+      grid-column: 2;
+      grid-row: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-top: 20px;
+    }
+
+    .meta-line {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--muted);
+      display: flex;
+      gap: 16px;
+      line-height: 1em;
+    }
+
+    .meta-line strong {
+      color: var(--fg);
+      font-weight: 500;
+      min-width: 80px;
+    }
+
+    /* ── CONTENT ──────────────────────────────── */
+    #content {
+      padding: 0 0 120px;
+    }
+
+    .section { display: none; }
+    .section.active { display: block; }
+
+    /* Two-column editorial grid */
+    .grid {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 0 64px;
+    }
+
+    .grid-label {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1em;
+      color: var(--muted);
+      letter-spacing: 0;
+      padding-top: 4px;
+    }
+
+    /* ── ABOUT ────────────────────────────────── */
+    .about-body {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .about-p {
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 140%;
+      letter-spacing: 0px;
+      color: var(--fg);
+    }
+
+    .about-p strong {
+      font-weight: 500;
+      color: var(--fg);
+    }
+
+    .about-p em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .interests {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .interest-item {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--muted);
+      padding: 12px 0;
+      border-bottom: 1px solid var(--dim);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: color 0.12s;
+    }
+
+    .interest-item:first-child { border-top: 1px solid var(--dim); }
+    .interest-item:hover { color: var(--fg); }
+    .interest-num { font-size: 11px; color: var(--dim); }
+
+    /* ── RESUME ───────────────────────────────── */
+    .exp-list { display: flex; flex-direction: column; }
+
+    .exp-item {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--dim);
+    }
+
+    .exp-item:first-child { border-top: 1px solid var(--dim); }
+
+    .exp-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 4px;
+      gap: 16px;
+    }
+
+    .exp-role {
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--fg);
+      letter-spacing: 0;
+    }
+
+    .exp-date {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1em;
+      color: var(--muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .exp-company {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1em;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .exp-desc {
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--muted);
+      line-height: 140%;
+      letter-spacing: 0px;
+    }
+
+    /* ── SKILLS ───────────────────────────────── */
+    .skill-group {
+      margin-bottom: 40px;
+    }
+
+    .skill-group-label {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: 0;
+      margin-bottom: 16px;
+    }
+
+    .skill-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .skill-item {
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--fg);
+      letter-spacing: 0px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--dim);
+      transition: color 0.12s;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .skill-item:first-child { border-top: 1px solid var(--dim); }
+    .skill-item:hover { color: var(--accent); }
+    .skill-item:hover .skill-arrow { opacity: 1; }
+
+    .skill-arrow {
+      font-size: 10px;
+      color: var(--accent);
+      opacity: 0;
+      transition: opacity 0.12s;
+    }
+
+    /* ── AWARDS ───────────────────────────────── */
+    .award-list { display: flex; flex-direction: column; }
+
+    .award-item {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--dim);
+      display: flex;
+      align-items: baseline;
+      gap: 24px;
+    }
+
+    .award-item:first-child { border-top: 1px solid var(--dim); }
+
+    .award-num {
+      font-size: 11px;
+      color: var(--dim);
+      min-width: 20px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .award-text {
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--fg);
+      line-height: 140%;
+      letter-spacing: 0px;
+    }
+
+    /* ── CONTACT ──────────────────────────────── */
+    .contact-list { display: flex; flex-direction: column; }
+
+    .contact-item {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--dim);
+      display: flex;
+      align-items: baseline;
+      gap: 40px;
+    }
+
+    .contact-item:first-child { border-top: 1px solid var(--dim); }
+
+    .contact-key {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: 0;
+      min-width: 90px;
+      flex-shrink: 0;
+    }
+
+    .contact-val {
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--fg);
+      letter-spacing: 0px;
+      transition: color 0.12s;
+    }
+
+    .contact-val:hover { color: var(--accent); }
+
+    /* ── FOOTER ───────────────────────────────── */
+    footer {
+      padding: 24px 0;
+      border-top: 1px solid var(--dim);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-copy {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--muted);
+      transition: color 0.12s;
+    }
+
+    .footer-links a:hover { color: var(--fg); }
+
+    /* ── MATRIX CANVAS ───────────────────────── */
+    #matrix {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.18;
+    }
+
+    .wrap { position: relative; z-index: 1; }
+
+    /* ── RESPONSIVE ───────────────────────────── */
+    @media (max-width: 720px) {
+      .wrap { padding: 0 20px; }
+      .hero-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto;
+      }
+      .hero-name    { grid-column: 1; grid-row: 1; padding-bottom: 24px; }
+      .hero-photo   { grid-column: 1; grid-row: 2; aspect-ratio: 3/2; margin-bottom: 24px; }
+      .hero-tagline { grid-column: 1; grid-row: 3; margin-bottom: 24px; }
+      .hero-meta    { grid-column: 1; grid-row: 4; padding-top: 0; }
+      .grid { grid-template-columns: 1fr; gap: 12px; }
+      .grid-label { padding-bottom: 4px; }
+      nav { gap: 16px; }
+      footer { flex-direction: column; gap: 14px; align-items: flex-start; }
+      .contact-item { gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="matrix"></canvas>
+
+<!-- SVG filters -->
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Isolate red channel -->
+  <filter id="ch-red">
+    <feColorMatrix type="matrix"
+      values="1 0 0 0 0
+              0 0 0 0 0
+              0 0 0 0 0
+              0 0 0 1 0"/>
+  </filter>
+  <!-- Isolate green channel -->
+  <filter id="ch-green">
+    <feColorMatrix type="matrix"
+      values="0 0 0 0 0
+              0 1 0 0 0
+              0 0 0 0 0
+              0 0 0 1 0"/>
+  </filter>
+  <!-- Isolate blue channel -->
+  <filter id="ch-blue">
+    <feColorMatrix type="matrix"
+      values="0 0 0 0 0
+              0 0 0 0 0
+              0 0 1 0 0
+              0 0 0 1 0"/>
+  </filter>
+</svg>
+
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">Griffin Sisk</div>
+    <div id="clock">00:00:00</div>
+  </header>
+
+  <hr>
+
+  <!-- NAV -->
+  <nav>
+    <a onclick="show('about')" id="nav-about" class="active">About</a>
+    <a onclick="show('resume')" id="nav-resume">Resume</a>
+    <a onclick="show('skills')" id="nav-skills">Skills</a>
+    <a onclick="show('awards')" id="nav-awards">Awards</a>
+    <a onclick="show('contact')" id="nav-contact">Contact</a>
+    <span class="sep"></span>
+    <a class="ext" href="https://linkedin.com/in/griffin-sisk-68a0b6ab" target="_blank">LinkedIn</a>
+    <a class="ext" href="https://github.com/griffinsisk" target="_blank">GitHub</a>
+    <a class="ext" href="https://www.instagram.com/griffsisk/" target="_blank">Instagram</a>
+  </nav>
+
+  <hr>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-grid">
+      <h1 class="hero-name">Griffin<br><span>Sisk</span></h1>
+      <div class="hero-photo">
+        <img class="ch-r" src="assets/img/profile.jpg" alt="" aria-hidden="true" />
+        <img class="ch-g" src="assets/img/profile.jpg" alt="Griffin Sisk" />
+        <img class="ch-b" src="assets/img/profile.jpg" alt="" aria-hidden="true" />
+      </div>
+      <p class="hero-tagline">
+        Helping companies take control of their cloud and AI spend — turning cost chaos into clear, actionable intelligence.
+      </p>
+      <div class="hero-meta">
+        <div class="meta-line"><strong>Role</strong> Senior Sales Engineer</div>
+        <div class="meta-line"><strong>Company</strong> CloudZero</div>
+        <div class="meta-line"><strong>Location</strong> Boston, MA</div>
+        <div class="meta-line"><strong>Exp.</strong> 6+ years in cloud</div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- CONTENT -->
+  <div id="content">
+
+    <!-- ABOUT -->
+    <div class="section active" id="section-about">
+      <div style="padding: 64px 0;">
+        <div class="grid">
+          <div class="grid-label">About</div>
+          <div class="about-body">
+            <p class="about-p">
+              I'm a <strong>Senior Sales Engineer at CloudZero</strong>, helping companies take control of their <em>cloud and AI spend</em>. My career has been a straight line through cloud cost management and optimization — from CloudHealth at VMware to now, where AI cost visibility is the next frontier.
+            </p>
+            <p class="about-p" style="font-size:15px; color: var(--muted);">
+              I care about making complex technology legible — to engineering teams, to finance, and to the people making decisions.
+            </p>
+          </div>
+        </div>
+
+        <div style="height: 56px;"></div>
+        <hr>
+        <div style="height: 56px;"></div>
+
+        <div class="grid">
+          <div class="grid-label">Interests</div>
+          <div class="interests">
+            <div class="interest-item"><span class="interest-num">01</span> Travel</div>
+            <div class="interest-item"><span class="interest-num">02</span> Health & Wellness</div>
+            <div class="interest-item"><span class="interest-num">03</span> AI & Technology</div>
+            <div class="interest-item"><span class="interest-num">04</span> Photography</div>
+            <div class="interest-item"><span class="interest-num">05</span> Videography</div>
+          </div>
+        </div>
+
+        <div style="height: 56px;"></div>
+        <hr>
+        <div style="height: 56px;"></div>
+
+        <div class="grid">
+          <div class="grid-label">Education</div>
+          <div class="exp-list">
+            <div class="exp-item">
+              <div class="exp-header">
+                <span class="exp-role">University of New Hampshire</span>
+                <span class="exp-date">2014 – 2018</span>
+              </div>
+              <div class="exp-company">Bachelor of Communication</div>
+              <div class="exp-desc">Men's D1 Rugby</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESUME -->
+    <div class="section" id="section-resume">
+      <div style="padding: 64px 0;">
+        <div class="grid">
+          <div class="grid-label">Experience</div>
+          <div class="exp-list">
+
+            <div class="exp-item">
+              <div class="exp-header">
+                <span class="exp-role">Senior Sales Engineer <span style="font-size:11px;font-weight:300;color:var(--muted)">↑ Feb 2026</span></span>
+                <span class="exp-date">Sep 2024 — Present</span>
+              </div>
+              <div class="exp-company">CloudZero</div>
+              <div class="exp-desc">Technical pre-sales at a cloud cost intelligence platform managing $14B+ in customer cloud spend. Run POCs, deliver technical demos, and help engineering and finance teams build cost allocation models across AWS, GCP, and Azure.</div>
+            </div>
+
+            <div class="exp-item">
+              <div class="exp-header">
+                <span class="exp-role">Senior Solutions Engineer</span>
+                <span class="exp-date">Dec 2023 — May 2024</span>
+              </div>
+              <div class="exp-company">Broadcom — Tanzu Intelligent Services</div>
+              <div class="exp-desc">Cloud management, security, and application observability post-VMware acquisition. Maintained technical relationships and pipeline during a complex org transition.</div>
+            </div>
+
+            <div class="exp-item">
+              <div class="exp-header">
+                <span class="exp-role">Senior Solutions Engineer</span>
+                <span class="exp-date">Aug 2021 — Dec 2023</span>
+              </div>
+              <div class="exp-company">VMware — CloudHealth & Secure Clouds</div>
+              <div class="exp-desc">Led technical evaluations for VMware's cloud cost management and security platforms. Built the Technical Enablement Program, closed the largest CloudHealth commercial deal, and maintained 90%+ customer renewal rates.</div>
+            </div>
+
+            <div class="exp-item">
+              <div class="exp-header">
+                <span class="exp-role">Technical Account Manager</span>
+                <span class="exp-date">Apr 2020 — Aug 2021</span>
+              </div>
+              <div class="exp-company">VMware — CloudHealth</div>
+              <div class="exp-desc">Owned post-sale success for 100+ customers. Built onboarding programs and automated outreach workflows that drove consistent retention above 90%.</div>
+            </div>
+
+            <div class="exp-item">
+              <div class="exp-header">
+                <span class="exp-role">Inside Sales Representative</span>
+                <span class="exp-date">Jan 2019 — Apr 2020</span>
+              </div>
+              <div class="exp-company">VMware — CloudHealth</div>
+              <div class="exp-desc">Grew pipeline through prospecting and discovery. Entry point into cloud cost management and the SE track.</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SKILLS -->
+    <div class="section" id="section-skills">
+      <div style="padding: 64px 0;">
+        <div class="grid">
+          <div class="grid-label">Skills</div>
+          <div>
+
+            <div class="skill-group">
+              <div class="skill-group-label">Cloud & AI Cost</div>
+              <div class="skill-list">
+                <div class="skill-item">AWS<span class="skill-arrow">→</span></div>
+                <div class="skill-item">Google Cloud<span class="skill-arrow">→</span></div>
+                <div class="skill-item">Microsoft Azure<span class="skill-arrow">→</span></div>
+                <div class="skill-item">CloudZero<span class="skill-arrow">→</span></div>
+                <div class="skill-item">VMware CloudHealth<span class="skill-arrow">→</span></div>
+                <div class="skill-item">Cloud Cost Optimization<span class="skill-arrow">→</span></div>
+                <div class="skill-item">AI Cost Management<span class="skill-arrow">→</span></div>
+              </div>
+            </div>
+
+            <div class="skill-group">
+              <div class="skill-group-label">Tools</div>
+              <div class="skill-list">
+                <div class="skill-item">Salesforce<span class="skill-arrow">→</span></div>
+                <div class="skill-item">Gainsight<span class="skill-arrow">→</span></div>
+                <div class="skill-item">Aha!<span class="skill-arrow">→</span></div>
+              </div>
+            </div>
+
+            <div class="skill-group">
+              <div class="skill-group-label">Development</div>
+              <div class="skill-list">
+                <div class="skill-item">HTML5<span class="skill-arrow">→</span></div>
+                <div class="skill-item">CSS<span class="skill-arrow">→</span></div>
+                <div class="skill-item">Python<span class="skill-arrow">→</span></div>
+              </div>
+            </div>
+
+            <div class="skill-group">
+              <div class="skill-group-label">Languages</div>
+              <div class="skill-list">
+                <div class="skill-item">English — Native<span class="skill-arrow">→</span></div>
+                <div class="skill-item">Spanish — B1<span class="skill-arrow">→</span></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AWARDS -->
+    <div class="section" id="section-awards">
+      <div style="padding: 64px 0;">
+        <div class="grid">
+          <div class="grid-label">Highlights</div>
+          <div class="award-list">
+            <div class="award-item"><span class="award-num">01</span><span class="award-text">Created the Technical Enablement Program</span></div>
+            <div class="award-item"><span class="award-num">02</span><span class="award-text">Developed automated customer outreach program</span></div>
+            <div class="award-item"><span class="award-num">03</span><span class="award-text">Closed largest CloudHealth commercial deal</span></div>
+            <div class="award-item"><span class="award-num">04</span><span class="award-text">Most Secure Clouds deals closed</span></div>
+            <div class="award-item"><span class="award-num">05</span><span class="award-text">Maintained 90%+ customer renewal rate</span></div>
+            <div class="award-item"><span class="award-num">06</span><span class="award-text">Aha! Product Management Professional Certification</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="section" id="section-contact">
+      <div style="padding: 64px 0;">
+        <div class="grid">
+          <div class="grid-label">Contact</div>
+          <div class="contact-list">
+            <div class="contact-item">
+              <span class="contact-key">Email</span>
+              <a class="contact-val" href="mailto:griffinjsisk@gmail.com">griffinjsisk@gmail.com</a>
+            </div>
+            <div class="contact-item">
+              <span class="contact-key">Location</span>
+              <span class="contact-val" style="cursor:default;">Boston, MA</span>
+            </div>
+            <div class="contact-item">
+              <span class="contact-key">LinkedIn</span>
+              <a class="contact-val" href="https://linkedin.com/in/griffin-sisk-68a0b6ab" target="_blank">griffin-sisk-68a0b6ab ↗</a>
+            </div>
+            <div class="contact-item">
+              <span class="contact-key">GitHub</span>
+              <a class="contact-val" href="https://github.com/griffinsisk" target="_blank">griffinsisk ↗</a>
+            </div>
+            <div class="contact-item">
+              <span class="contact-key">Instagram</span>
+              <a class="contact-val" href="https://www.instagram.com/griffsisk/" target="_blank">griffsisk ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <hr>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-copy">© <span id="year"></span> Griffin Sisk</div>
+    <div class="footer-links">
+      <a href="https://linkedin.com/in/griffin-sisk-68a0b6ab" target="_blank">LinkedIn</a>
+      <a href="https://github.com/griffinsisk" target="_blank">GitHub</a>
+      <a href="https://www.instagram.com/griffsisk/" target="_blank">Instagram</a>
+      <a href="mailto:griffinjsisk@gmail.com">Email</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  // Matrix rain
+  (function () {
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+    const FONT_SIZE = 13;
+    const COLOR = '#00d4b4';
+    let cols, drops;
+
+    function resize() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+      cols  = Math.floor(canvas.width / FONT_SIZE);
+      drops = Array.from({ length: cols }, () => Math.random() * -100);
+    }
+
+    function draw() {
+      // Fade trail
+      ctx.fillStyle = 'rgba(29, 29, 31, 0.08)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.font = `${FONT_SIZE}px "Geist Mono", monospace`;
+
+      for (let i = 0; i < drops.length; i++) {
+        const char = Math.random() < 0.5 ? '0' : '1';
+        const y = drops[i] * FONT_SIZE;
+
+        // Head character — bright
+        ctx.fillStyle = '#ffffff';
+        ctx.globalAlpha = 0.9;
+        ctx.fillText(char, i * FONT_SIZE, y);
+
+        // Body — teal
+        ctx.fillStyle = COLOR;
+        ctx.globalAlpha = 0.7;
+        ctx.fillText(Math.random() < 0.5 ? '0' : '1', i * FONT_SIZE, y - FONT_SIZE);
+
+        ctx.globalAlpha = 1;
+
+        // Reset drop randomly after it passes bottom
+        if (y > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i] += 0.4;
+      }
+    }
+
+    resize();
+    window.addEventListener('resize', resize);
+    setInterval(draw, 40);
+  })();
+
+  // Clock
+  function tick() {
+    const p = n => String(n).padStart(2,'0');
+    const n = new Date();
+    document.getElementById('clock').textContent =
+      `${p(n.getHours())}:${p(n.getMinutes())}:${p(n.getSeconds())}`;
+  }
+  tick(); setInterval(tick, 1000);
+
+  // Year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Nav
+  function show(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('nav a[id]').forEach(a => a.classList.remove('active'));
+    document.getElementById('section-' + id).classList.add('active');
+    document.getElementById('nav-' + id).classList.add('active');
+  }
+</script>
+</body>
+</html>
