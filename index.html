@@ -29,9 +29,14 @@
       line-height: 1.6;
       min-height: 100vh;
       overflow-x: hidden;
+      cursor: url("data:image/svg+xml;utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='32'%20height='32'%20viewBox='0%200%2032%2032'%3E%3Cpath%20d='M14%2017%20L22%2015%20L18%2026%20Z'%20fill='%23e8e8ee'%20stroke='black'%20stroke-width='1.4'%20stroke-linejoin='round'/%3E%3Cpath%20d='M29%202%20L4%2010%20L14%2017%20L4%2028%20Z'%20fill='white'%20stroke='black'%20stroke-width='1.4'%20stroke-linejoin='round'/%3E%3Cpath%20d='M29%202%20L14%2017'%20stroke='black'%20stroke-width='1.2'%20fill='none'%20stroke-linecap='round'/%3E%3C/svg%3E") 29 2, auto;
     }
 
     a { color: inherit; text-decoration: none; }
+
+    a, button, [onclick], .interest-item, label, summary, input[type="button"], input[type="submit"] {
+      cursor: url("data:image/svg+xml;utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='32'%20height='32'%20viewBox='0%200%2032%2032'%3E%3Cpath%20d='M14%2017%20L22%2015%20L18%2026%20Z'%20fill='%23e8e8ee'%20stroke='black'%20stroke-width='1.4'%20stroke-linejoin='round'/%3E%3Cpath%20d='M22%207%20L25%203%20L21%205%20L24%208%20L20%207%20L22%2011%20L4%2010%20L14%2017%20L4%2028%20Z'%20fill='white'%20stroke='black'%20stroke-width='1.4'%20stroke-linejoin='round'/%3E%3Cpath%20d='M22%207%20L14%2017'%20stroke='black'%20stroke-width='1.2'%20fill='none'%20stroke-linecap='round'/%3E%3Cpath%20d='M26%202%20L29%205%20M27%208%20L30%209'%20stroke='black'%20stroke-width='1.2'%20fill='none'%20stroke-linecap='round'/%3E%3C/svg%3E") 22 7, pointer;
+    }
 
     /* ── HERO NAME ────────────────────────────── */
     .hero-name {
@@ -74,6 +79,12 @@
       position: relative;
       overflow: hidden;
       margin-bottom: 40px;
+      clip-path: polygon(
+        0% 3%, 8% 0%, 16% 3%, 25% 0%, 33% 3%, 41% 0%, 50% 3%, 58% 0%, 66% 3%, 75% 0%, 83% 3%, 91% 0%, 100% 3%,
+        97% 12%, 100% 25%, 97% 37%, 100% 50%, 97% 62%, 100% 75%, 97% 87%, 100% 97%,
+        91% 100%, 83% 97%, 75% 100%, 66% 97%, 58% 100%, 50% 97%, 41% 100%, 33% 97%, 25% 100%, 16% 97%, 8% 100%, 0% 97%,
+        3% 87%, 0% 75%, 3% 62%, 0% 50%, 3% 37%, 0% 25%, 3% 12%
+      );
     }
 
     .bio-photo img {
@@ -119,8 +130,8 @@
     }
 
     .bio-links {
-      margin-top: 40px;
-      padding-top: 20px;
+      margin-top: 16px;
+      padding-top: 12px;
       border-top: 1px solid var(--dim);
       display: flex;
       flex-direction: column;
@@ -161,7 +172,7 @@
     .col-right {
       flex: 1;
       min-width: 0;
-      padding-bottom: 120px;
+      padding-bottom: 40px;
     }
 
     /* Right-column nav bar */
@@ -464,47 +475,14 @@
 
     .contact-val:hover { color: var(--accent); }
 
-    /* ── BOTTOM BAR ──────────────────────────── */
-    .bottom-bar {
+    /* ── PAGE BORDER ──────────────────────────── */
+    .page-border {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: var(--black);
-      border-top: 1px solid var(--dim);
+      inset: 0;
+      border: 1px solid #ff0033;
+      pointer-events: none;
       z-index: 100;
-      display: flex;
-      justify-content: center;
     }
-
-    .bottom-bar-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      max-width: 1300px;
-      padding: 12px 60px;
-    }
-
-    .bottom-meta {
-      font-family: var(--sans);
-      font-size: 10px;
-      font-weight: 300;
-      color: rgba(255,255,255,0.3);
-      line-height: 1.4;
-    }
-
-    .bottom-right a {
-      font-family: var(--cond);
-      font-size: 12px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--muted);
-      transition: color 0.1s;
-    }
-
-    .bottom-right a:hover { color: var(--white); }
 
     /* ── RESPONSIVE ───────────────────────────── */
     @media (max-width: 860px) {
@@ -512,9 +490,8 @@
       .columns { flex-direction: column; padding: 0 24px; gap: 40px; }
       .col-left { width: 100%; position: relative; top: auto; }
       .bio-photo { max-width: 360px; }
-      .col-right { padding-bottom: 80px; }
+      .col-right { padding-bottom: 32px; }
       .content-nav { gap: 20px; }
-      .bottom-bar { padding: 10px 24px; }
     }
   </style>
 </head>
@@ -533,11 +510,11 @@
       <img src="assets/img/profile.jpg" alt="Griffin Sisk" />
     </div>
 
-    <div class="bio-heading">Connect With Griffin ←</div>
-
     <p class="bio-text">
-      I'm a Senior Sales Engineer at CloudZero, helping companies understand and control their cloud and AI spend. I've spent my career in cloud cost optimization, from VMware and Broadcom to CloudZero, working at the intersection of engineering and finance. Outside of work, you'll find me shooting photography and video, traveling, or staying active.
+      Boston-based. Exploring new places, new cultures, and whatever's on the other end of my next flight. In motion, building, and staying curious.
     </p>
+
+    <div class="bio-heading">Connect With Me ↓</div>
 
     <div class="bio-links">
       <div class="bio-links-row">
@@ -739,17 +716,8 @@
   </div>
 </div>
 
-<!-- ── BOTTOM BAR ──────────────────────────────── -->
-<div class="bottom-bar">
-  <div class="bottom-bar-inner">
-    <div class="bottom-meta">
-      <span id="clock-bottom">00:00:00</span>
-    </div>
-    <div class="bottom-right">
-      <a href="mailto:griffinjsisk@gmail.com">Get In Touch</a>
-    </div>
-  </div>
-</div>
+<!-- ── PAGE BORDER ──────────────────────────────── -->
+<div class="page-border" aria-hidden="true"></div>
 
 <script>
   // Clock
@@ -758,7 +726,6 @@
     const d = new Date();
     const t = `${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
     document.getElementById('clock').textContent = t;
-    document.getElementById('clock-bottom').textContent = t;
   }
   tick(); setInterval(tick, 1000);
 
