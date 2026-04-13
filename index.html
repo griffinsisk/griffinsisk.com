@@ -29,13 +29,35 @@
       line-height: 1.6;
       min-height: 100vh;
       overflow-x: hidden;
-      cursor: url("data:image/svg+xml;utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='32'%20height='32'%20viewBox='0%200%2032%2032'%3E%3Cpath%20d='M14%2017%20L22%2015%20L18%2026%20Z'%20fill='%23e8e8ee'%20stroke='black'%20stroke-width='1.4'%20stroke-linejoin='round'/%3E%3Cpath%20d='M29%202%20L4%2010%20L14%2017%20L4%2028%20Z'%20fill='white'%20stroke='black'%20stroke-width='1.4'%20stroke-linejoin='round'/%3E%3Cpath%20d='M29%202%20L14%2017'%20stroke='black'%20stroke-width='1.2'%20fill='none'%20stroke-linecap='round'/%3E%3C/svg%3E") 29 2, auto;
     }
 
     a { color: inherit; text-decoration: none; }
 
     a, button, [onclick], .interest-item, label, summary, input[type="button"], input[type="submit"] {
-      cursor: url("data:image/svg+xml;utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='32'%20height='32'%20viewBox='0%200%2032%2032'%3E%3Cpath%20d='M14%2017%20L22%2015%20L18%2026%20Z'%20fill='%23e8e8ee'%20stroke='black'%20stroke-width='1.4'%20stroke-linejoin='round'/%3E%3Cpath%20d='M22%207%20L25%203%20L21%205%20L24%208%20L20%207%20L22%2011%20L4%2010%20L14%2017%20L4%2028%20Z'%20fill='white'%20stroke='black'%20stroke-width='1.4'%20stroke-linejoin='round'/%3E%3Cpath%20d='M22%207%20L14%2017'%20stroke='black'%20stroke-width='1.2'%20fill='none'%20stroke-linecap='round'/%3E%3Cpath%20d='M26%202%20L29%205%20M27%208%20L30%209'%20stroke='black'%20stroke-width='1.2'%20fill='none'%20stroke-linecap='round'/%3E%3C/svg%3E") 22 7, pointer;
+      cursor: pointer;
+    }
+
+    /* Cursor tile trail */
+    .cursor-tile {
+      position: fixed;
+      width: 26px; height: 26px;
+      background: #000;
+      border: 1.5px solid #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono, ui-monospace, monospace);
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      pointer-events: none;
+      z-index: 9999;
+      will-change: transform, opacity;
+      animation: tile-pop 750ms ease-out forwards;
+    }
+    @keyframes tile-pop {
+      0%   { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
+      15%  { transform: translate(-50%, -50%) scale(1);   opacity: 1; }
+      70%  { transform: translate(-50%, -50%) scale(1);   opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(0.6); opacity: 0; }
     }
 
     /* ── HERO NAME ────────────────────────────── */
@@ -191,7 +213,6 @@
       letter-spacing: 0.04em;
       color: var(--muted);
       transition: color 0.1s;
-      cursor: pointer;
       white-space: nowrap;
     }
 
@@ -639,7 +660,7 @@
         <span class="highlight-num">01</span>
         <div class="highlight-body">
           <div class="highlight-title">Scaled the Commercial SE Function <span class="highlight-tag">CloudZero</span></div>
-          <div class="highlight-desc">First and only commercial SE — built the technical sales motion for the commercial segment, supporting 50+ new logos and over $2M in revenue.</div>
+          <div class="highlight-desc">First and only commercial SE — built the technical sales motion for the commercial segment, brought in 50+ new logos and over $2M in revenue.</div>
         </div>
       </div>
 
@@ -731,6 +752,54 @@
 
   // Year
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Cursor tile trail — clustered spawn
+  (() => {
+    const GLYPHS = ['W', '×', '✳', '◆', '●', '□', '+', 'O', '◇', '△', '*', 'X'];
+    const OFFSETS = [
+      [  0,   0],
+      [  0, -30],
+      [  0,  30],
+      [-30,   0],
+      [ 30,   0],
+      [-24, -24],
+      [ 24,  24],
+    ];
+    let last = 0, lastX = 0, lastY = 0;
+    const MIN_MS = 110;
+    const MIN_DIST = 60;
+    function spawnCluster(cx, cy) {
+      const count = 3 + Math.floor(Math.random() * 3);
+      const picks = OFFSETS.slice().sort(() => Math.random() - 0.5).slice(0, count);
+      picks.forEach((off, i) => {
+        const t = document.createElement('div');
+        t.className = 'cursor-tile';
+        t.textContent = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+        const jx = (Math.random() - 0.5) * 8;
+        const jy = (Math.random() - 0.5) * 8;
+        t.style.left = (cx + off[0] + jx) + 'px';
+        t.style.top  = (cy + off[1] + jy) + 'px';
+        t.style.animationDelay = (i * 30) + 'ms';
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 820 + i * 30);
+      });
+    }
+    const SKIP_CURSORS = new Set(['pointer', 'text', 'grab', 'grabbing']);
+    document.addEventListener('mousemove', (e) => {
+      const now = performance.now();
+      const dx = e.clientX - lastX, dy = e.clientY - lastY;
+      if (now - last < MIN_MS || (dx*dx + dy*dy) < MIN_DIST*MIN_DIST) return;
+      last = now; lastX = e.clientX; lastY = e.clientY;
+      const el = document.elementFromPoint(e.clientX, e.clientY);
+      if (el) {
+        const c = getComputedStyle(el).cursor;
+        if (SKIP_CURSORS.has(c)) return;
+        const tag = el.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || el.isContentEditable) return;
+      }
+      spawnCluster(e.clientX, e.clientY);
+    }, { passive: true });
+  })();
 
   // Panel nav
   function show(id) {
