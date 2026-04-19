@@ -532,7 +532,7 @@
     </div>
 
     <p class="bio-text">
-      Boston-based. Exploring new places, new cultures, and whatever's on the other end of my next flight. In motion, building, and staying curious.
+      Focused on motion, living well, and growing through new experiences. I'm passionate about challenging myself, and I find the most meaning in building, exploring, and pushing beyond what feels comfortable. New places, new cultures, and new perspectives are what keep me inspired.
     </p>
 
     <div class="bio-heading">Connect With Me ↓</div>
@@ -675,8 +675,8 @@
       <div class="highlight-item">
         <span class="highlight-num">03</span>
         <div class="highlight-body">
-          <div class="highlight-title">Created Technical Enablement Program <span class="highlight-tag">VMware / Broadcom</span></div>
-          <div class="highlight-desc">Designed and delivered technical training for AEs to self-serve on early-stage demos and cloud cost positioning, reducing SE bottlenecks in the sales cycle.</div>
+          <div class="highlight-title">Created Cross-Product Enablement Program <span class="highlight-tag">VMware / Broadcom</span></div>
+          <div class="highlight-desc">Pulled together SEs and AEs across the product suite to enable the full team on each other's products — shifting the go-to-market from product and feature selling toward cohesive solution selling.</div>
         </div>
       </div>
 
@@ -684,7 +684,7 @@
         <span class="highlight-num">04</span>
         <div class="highlight-body">
           <div class="highlight-title">Closed Largest CloudHealth Commercial Deal <span class="highlight-tag">VMware / Broadcom</span></div>
-          <div class="highlight-desc">Led the technical sale for the largest commercial deal in CloudHealth history, including custom SSO integration and cost allocation framework design.</div>
+          <div class="highlight-desc">Led the technical sale for the largest commercial deal in CloudHealth history, including automated data ingestions, a complex cost allocation model, and significant actionable cost savings of ~20%.</div>
         </div>
       </div>
 
@@ -692,7 +692,7 @@
         <span class="highlight-num">05</span>
         <div class="highlight-body">
           <div class="highlight-title">Developed Automated Customer Outreach Program <span class="highlight-tag">CloudHealth</span></div>
-          <div class="highlight-desc">Built an automated outreach system to surface expansion and upsell opportunities from existing accounts, turning cost data into revenue signals.</div>
+          <div class="highlight-desc">Built an automated outreach system to surface expansion and upsell opportunities from existing accounts, turning cost data into revenue signals while increasing customer adoption and retention.</div>
         </div>
       </div>
     </div>
@@ -784,7 +784,32 @@
         setTimeout(() => t.remove(), 820 + i * 30);
       });
     }
-    const SKIP_CURSORS = new Set(['pointer', 'text', 'grab', 'grabbing']);
+    const SKIP_CURSORS = new Set(['pointer', 'text', 'grab', 'grabbing', 'help', 'not-allowed']);
+    function pointOverText(x, y) {
+      let range = null;
+      if (document.caretRangeFromPoint) range = document.caretRangeFromPoint(x, y);
+      else if (document.caretPositionFromPoint) {
+        const p = document.caretPositionFromPoint(x, y);
+        if (p && p.offsetNode) return p.offsetNode.nodeType === 3;
+      }
+      if (!range) return false;
+      const node = range.startContainer;
+      if (!node || node.nodeType !== 3) return false;
+      const text = node.nodeValue || '';
+      if (!text.trim()) return false;
+      // Confirm the caret actually sits on a rendered glyph, not empty whitespace beside text.
+      const r = document.createRange();
+      try {
+        const i = range.startOffset;
+        r.setStart(node, Math.max(0, i - 1));
+        r.setEnd(node, Math.min(text.length, i + 1));
+        const rects = r.getClientRects();
+        for (const rect of rects) {
+          if (x >= rect.left - 2 && x <= rect.right + 2 && y >= rect.top - 2 && y <= rect.bottom + 2) return true;
+        }
+      } catch (_) {}
+      return false;
+    }
     document.addEventListener('mousemove', (e) => {
       const now = performance.now();
       const dx = e.clientX - lastX, dy = e.clientY - lastY;
@@ -796,6 +821,7 @@
         if (SKIP_CURSORS.has(c)) return;
         const tag = el.tagName;
         if (tag === 'INPUT' || tag === 'TEXTAREA' || el.isContentEditable) return;
+        if (c === 'auto' && pointOverText(e.clientX, e.clientY)) return;
       }
       spawnCluster(e.clientX, e.clientY);
     }, { passive: true });
