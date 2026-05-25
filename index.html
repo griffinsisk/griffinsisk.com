@@ -37,26 +37,20 @@
       cursor: pointer;
     }
 
-    /* Cursor tile trail */
+    /* Cursor dot trail */
     .cursor-tile {
       position: fixed;
-      width: 26px; height: 26px;
-      background: #000;
-      border: 1.5px solid #fff;
-      display: flex; align-items: center; justify-content: center;
-      font-family: var(--mono, ui-monospace, monospace);
-      font-size: 14px;
-      font-weight: 700;
-      color: #fff;
+      width: 5px; height: 5px;
+      background: rgba(255,255,255,0.45);
+      border-radius: 50%;
       pointer-events: none;
       z-index: 9999;
       will-change: transform, opacity;
-      animation: tile-pop 750ms ease-out forwards;
+      animation: tile-pop 600ms ease-out forwards;
     }
     @keyframes tile-pop {
-      0%   { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
-      15%  { transform: translate(-50%, -50%) scale(1);   opacity: 1; }
-      70%  { transform: translate(-50%, -50%) scale(1);   opacity: 1; }
+      0%   { transform: translate(-50%, -50%) scale(0.4); opacity: 0; }
+      20%  { transform: translate(-50%, -50%) scale(1);   opacity: 1; }
       100% { transform: translate(-50%, -50%) scale(0.6); opacity: 0; }
     }
 
@@ -457,13 +451,88 @@
     }
 
     /* ── PROJECTS ─────────────────────────────── */
-    .projects-coming-sub {
+    .projects-intro {
       font-size: 13px;
       font-weight: 300;
       color: var(--muted);
       line-height: 1.7;
-      max-width: 460px;
+      max-width: 520px;
+      margin-bottom: 40px;
     }
+
+    .project-item {
+      margin-bottom: 40px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid var(--dim);
+    }
+
+    .project-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .project-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px 20px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .project-title {
+      font-family: var(--cond);
+      font-size: 20px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.01em;
+      color: var(--white);
+    }
+
+    .project-stack {
+      font-family: var(--cond);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .project-desc {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 520px;
+      margin-bottom: 14px;
+    }
+
+    .project-points {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-width: 520px;
+    }
+
+    .project-points li {
+      position: relative;
+      padding-left: 18px;
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .project-points li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 8px;
+      width: 5px;
+      height: 5px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    .project-points li strong { color: var(--white); font-weight: 500; }
 
     /* ── CONTACT ──────────────────────────────── */
     .contact-item {
@@ -532,7 +601,7 @@
     </div>
 
     <p class="bio-text">
-      Focused on motion, living well, and growing through new experiences. I'm passionate about challenging myself, and I find the most meaning in building, exploring, and pushing beyond what feels comfortable. New places, new cultures, and new perspectives are what keep me inspired.
+      Currently focused on AI Engineering and emerging technology. I'm driven by purpose, creativity, and a desire to push myself into experiences that expand how I see the world.<br><br>I'm at my best when I'm learning fast, keeping my imagination sharp, building something impactful, and moving toward the edge of what feels comfortable.
     </p>
 
     <div class="bio-heading">Connect With Me ↓</div>
@@ -576,7 +645,10 @@
 
       <div class="about-block">
         <p class="about-block-text">
-          I'm a <strong>Senior Sales Engineer at CloudZero</strong>, helping companies understand and control their <em>cloud and AI spend</em>. I've spent my career in cloud cost optimization, from VMware and Broadcom to CloudZero, working at the intersection of engineering and finance. Outside of work, you'll find me shooting photography and video, traveling, or staying active.
+          I'm a <strong>Senior Sales Engineer at CloudZero</strong>, where I run technical evaluations and help customers build cost models across cloud, Kubernetes, and AI spend. I've spent six years in technical pre-sales at VMware, Broadcom, and CloudZero — earning trust with engineering teams, articulating complex value to executives, and winning competitive deals.
+        </p>
+        <p class="about-block-text" style="margin-top: 16px;">
+          That work pulled me into <em>building with AI</em> myself. I've shipped tools on the side that enable internal teams: an assistant that answers product questions live on customer calls, a system that surfaces scattered market news into a weekly digest, and a tool that helps AI coding agents write correct cost-allocation code. I like that it's the same instinct as my sales work — just pointed at building the product instead of selling it.
         </p>
       </div>
 
@@ -660,20 +732,36 @@
         <span class="highlight-num">01</span>
         <div class="highlight-body">
           <div class="highlight-title">Scaled the Commercial SE Function <span class="highlight-tag">CloudZero</span></div>
-          <div class="highlight-desc">First and only commercial SE — built the technical sales motion for the commercial segment, brought in 50+ new logos and over $2M in revenue.</div>
+          <div class="highlight-desc">First and only commercial SE — largely contributed to the technical sales motion for the commercial segment, brought in 50+ new logos and over $2M in revenue.</div>
         </div>
       </div>
 
       <div class="highlight-item">
         <span class="highlight-num">02</span>
         <div class="highlight-body">
-          <div class="highlight-title">Built AI-Powered Workflow Tools <span class="highlight-tag">CloudZero</span></div>
-          <div class="highlight-desc">Designed multi-agent systems and AI-powered creative workflows using Claude Code CLI, MCP integrations, and custom automation pipelines.</div>
+          <div class="highlight-title">Implemented AI Product SE Helper <span class="highlight-tag">CloudZero</span></div>
+          <div class="highlight-desc">An AI-powered SE assistant for live customer calls — pulls from Confluence and a weekly private repo summary to give instant, source-cited answers about CloudZero's rapidly evolving AI Telemetry product. Leads with what's customer-ready, flags what's in-progress, and never guesses.</div>
         </div>
       </div>
 
       <div class="highlight-item">
         <span class="highlight-num">03</span>
+        <div class="highlight-body">
+          <div class="highlight-title">Built CostFormation Brain <span class="highlight-tag">CloudZero</span></div>
+          <div class="highlight-desc">An AI knowledge corpus that turns any coding agent into an expert at writing CloudZero CostFormation YAML — the code the allocation engine relies on to decide how spend gets allocated. As more customers build and maintain that allocation logic with AI coding tools, this drops into a project alongside Claude Code, Cursor, Copilot, or Codex and produces correct, performant definitions on the first try.</div>
+        </div>
+      </div>
+
+      <div class="highlight-item">
+        <span class="highlight-num">04</span>
+        <div class="highlight-body">
+          <div class="highlight-title">Built AI Signal Digest <span class="highlight-tag">CloudZero</span></div>
+          <div class="highlight-desc">Weekly GTM enablement pipeline that pulls signal from competitor changelogs, AI provider releases, customer calls, and internal Slack — then synthesizes a digest that helps reps proactively steer conversations toward AI cost allocation.</div>
+        </div>
+      </div>
+
+      <div class="highlight-item">
+        <span class="highlight-num">05</span>
         <div class="highlight-body">
           <div class="highlight-title">Created Cross-Product Enablement Program <span class="highlight-tag">VMware / Broadcom</span></div>
           <div class="highlight-desc">Pulled together SEs and AEs across the product suite to enable the full team on each other's products — shifting the go-to-market from product and feature selling toward cohesive solution selling.</div>
@@ -681,7 +769,7 @@
       </div>
 
       <div class="highlight-item">
-        <span class="highlight-num">04</span>
+        <span class="highlight-num">06</span>
         <div class="highlight-body">
           <div class="highlight-title">Closed Largest CloudHealth Commercial Deal <span class="highlight-tag">VMware / Broadcom</span></div>
           <div class="highlight-desc">Led the technical sale for the largest commercial deal in CloudHealth history, including automated data ingestions, a complex cost allocation model, and significant actionable cost savings of ~20%.</div>
@@ -689,7 +777,7 @@
       </div>
 
       <div class="highlight-item">
-        <span class="highlight-num">05</span>
+        <span class="highlight-num">07</span>
         <div class="highlight-body">
           <div class="highlight-title">Developed Automated Customer Outreach Program <span class="highlight-tag">CloudHealth</span></div>
           <div class="highlight-desc">Built an automated outreach system to surface expansion and upsell opportunities from existing accounts, turning cost data into revenue signals while increasing customer adoption and retention.</div>
@@ -700,7 +788,60 @@
     <!-- PROJECTS -->
     <div class="panel" id="panel-projects">
       <div class="panel-title">Projects</div>
-      <p class="projects-coming-sub">This section will house AI tools, photography work, and side projects. Check back soon.</p>
+      <p class="projects-intro">A few things I've designed and shipped. I care as much about the context design, evaluation, and reliability behind these as the prompts themselves.</p>
+
+      <div class="project-item">
+        <div class="project-head">
+          <div class="project-title">CostFormation Brain</div>
+          <div class="project-stack">Claude · MCP · Multi-agent</div>
+        </div>
+        <p class="project-desc">An AI knowledge corpus that turns any coding agent into an expert at writing CloudZero CostFormation YAML, the allocation logic that decides how cloud spend gets attributed. Built to work across Claude Code, Cursor, Copilot, and Codex.</p>
+        <ul class="project-points">
+          <li>Designed a <strong>context architecture</strong> that makes agents read a strict ruleset and route through a 9-file corpus before generating, cutting the wrong-but-plausible syntax general models produce by default.</li>
+          <li>Built auto-populating org context from a customer's live config plus the CloudZero MCP, with a compact index so context persists efficiently across sessions.</li>
+          <li>Packaged one corpus to deploy identically across five AI coding tools by mapping each to its native instruction format.</li>
+        </ul>
+      </div>
+
+      <div class="project-item">
+        <div class="project-head">
+          <div class="project-title">SE AI Telemetry Helper</div>
+          <div class="project-stack">Claude Team Projects · Python · launchd</div>
+        </div>
+        <p class="project-desc">An automated knowledge pipeline that keeps a Claude Team Project accurate enough to use on live customer calls, spanning 9 code repos, Confluence, and a 104K-line Swift codebase that ships weekly.</p>
+        <ul class="project-points">
+          <li>Designed a <strong>tiered authority system and uncertainty protocol</strong> so the assistant never presents an unverified feature as customer-ready, engineering directly against the confidently-wrong failure mode.</li>
+          <li>Built an unattended sync pipeline with launchd, a Google Drive bridge, and Python that keeps knowledge fresh on a schedule instead of relying on manual curation.</li>
+          <li>Used Claude to distill a 104K-line Swift and Go codebase into a focused technical reference, working around context limits with graceful degradation.</li>
+          <li>Tuned a customer-answer-first response format for real-time use mid-call.</li>
+        </ul>
+      </div>
+
+      <div class="project-item">
+        <div class="project-head">
+          <div class="project-title">AI Signal Digest</div>
+          <div class="project-stack">Claude CLI · Python · Prompt evals</div>
+        </div>
+        <p class="project-desc">A weekly GTM enablement pipeline that synthesizes AI and competitive market signal into a digest reps can act on.</p>
+        <ul class="project-points">
+          <li>Built <strong>multi-source ingestion</strong> across six external feeds, customer call transcripts, and internal Slack, with a defined spec for signal versus noise.</li>
+          <li>Version-controlled prompts and saved fixtures for regression testing, so output quality doesn't drift as the pipeline grows.</li>
+          <li>Ran the full pipeline through the Claude CLI with no API key required.</li>
+        </ul>
+      </div>
+
+      <div class="project-item">
+        <div class="project-head">
+          <div class="project-title">Contact Sheet</div>
+          <div class="project-stack">Next.js · TypeScript · Claude vision</div>
+        </div>
+        <p class="project-desc">A Next.js app that uses Claude to cull and score large photo sets with intent-aware scoring, built from my own photography work.</p>
+        <ul class="project-points">
+          <li>Built a production-style web app in Next.js and TypeScript with Claude doing <strong>vision-based image scoring</strong> against user intent.</li>
+          <li>Created an eval-fixtures harness and Playwright tests to measure scoring quality and catch regressions.</li>
+          <li>Designed scoring logic that ranks images by what the photographer is selecting for, not generic aesthetics.</li>
+        </ul>
+      </div>
     </div>
 
     <!-- CONTACT -->
@@ -713,7 +854,7 @@
         </div>
         <div class="contact-item">
           <span class="contact-key">Location</span>
-          <span class="contact-val" style="cursor:default;">Boston, MA</span>
+          <span class="contact-val" style="cursor:default;">Boston, MA &amp; New York City, NY</span>
         </div>
         <div class="contact-item">
           <span class="contact-key">LinkedIn</span>
@@ -753,36 +894,18 @@
   // Year
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // Cursor tile trail — clustered spawn
+  // Cursor dot trail — single subtle dot
   (() => {
-    const GLYPHS = ['W', '×', '✳', '◆', '●', '□', '+', 'O', '◇', '△', '*', 'X'];
-    const OFFSETS = [
-      [  0,   0],
-      [  0, -30],
-      [  0,  30],
-      [-30,   0],
-      [ 30,   0],
-      [-24, -24],
-      [ 24,  24],
-    ];
     let last = 0, lastX = 0, lastY = 0;
-    const MIN_MS = 110;
-    const MIN_DIST = 60;
-    function spawnCluster(cx, cy) {
-      const count = 3 + Math.floor(Math.random() * 3);
-      const picks = OFFSETS.slice().sort(() => Math.random() - 0.5).slice(0, count);
-      picks.forEach((off, i) => {
-        const t = document.createElement('div');
-        t.className = 'cursor-tile';
-        t.textContent = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
-        const jx = (Math.random() - 0.5) * 8;
-        const jy = (Math.random() - 0.5) * 8;
-        t.style.left = (cx + off[0] + jx) + 'px';
-        t.style.top  = (cy + off[1] + jy) + 'px';
-        t.style.animationDelay = (i * 30) + 'ms';
-        document.body.appendChild(t);
-        setTimeout(() => t.remove(), 820 + i * 30);
-      });
+    const MIN_MS = 30;
+    const MIN_DIST = 18;
+    function spawnDot(cx, cy) {
+      const t = document.createElement('div');
+      t.className = 'cursor-tile';
+      t.style.left = cx + 'px';
+      t.style.top  = cy + 'px';
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 650);
     }
     const SKIP_CURSORS = new Set(['pointer', 'text', 'grab', 'grabbing', 'help', 'not-allowed']);
     function pointOverText(x, y) {
@@ -823,7 +946,7 @@
         if (tag === 'INPUT' || tag === 'TEXTAREA' || el.isContentEditable) return;
         if (c === 'auto' && pointOverText(e.clientX, e.clientY)) return;
       }
-      spawnCluster(e.clientX, e.clientY);
+      spawnDot(e.clientX, e.clientY);
     }, { passive: true });
   })();
 
