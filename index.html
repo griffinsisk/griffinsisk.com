@@ -612,6 +612,25 @@
     .contact-val:hover { color: var(--accent); }
 
     /* ── ASK ──────────────────────────────────── */
+    /* The Ask AI tab is the one colored item in the nav — deliberate draw. */
+    .content-nav a#nav-ask { color: var(--accent); }
+    .content-nav a#nav-ask:hover,
+    .content-nav a#nav-ask.active {
+      color: var(--accent);
+      text-shadow: 0 0 14px rgba(0,212,180,0.55);
+    }
+    .ask-star {
+      display: inline-block;
+      animation: ask-twinkle 2.4s ease-in-out infinite;
+    }
+    @keyframes ask-twinkle {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.45; transform: scale(0.8); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ask-star { animation: none; }
+    }
+
     .ask-intro {
       font-size: 13px; font-weight: 300; color: var(--muted);
       line-height: 1.7; max-width: 520px; margin-bottom: 24px;
@@ -730,7 +749,7 @@
       <a href="#highlights" id="nav-highlights">Highlights</a>
       <a href="#projects" id="nav-projects">Projects</a>
       <a href="#contact" id="nav-contact">Contact</a>
-      <a href="#ask" id="nav-ask">Ask</a>
+      <a href="#ask" id="nav-ask"><span class="ask-star" aria-hidden="true">✦</span> Ask AI</a>
     </nav>
 
     <!-- ABOUT -->
@@ -976,7 +995,7 @@
 
     <!-- ASK -->
     <div class="panel" id="panel-ask">
-      <div class="panel-title">Ask</div>
+      <div class="panel-title">Ask AI</div>
       <p class="ask-intro">An assistant grounded in a curated corpus about my work. It cites where each answer comes from — and says so plainly when something isn't covered. The assistant is itself one of my projects: ask it how it works.</p>
 
       <div class="ask-chips">
