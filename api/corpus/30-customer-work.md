@@ -14,7 +14,3 @@ without a public reference):
 - Built an automated outreach program at CloudHealth that turned cost data
   into expansion signals across a 100+ account book while keeping retention
   above 90%.
-
-<!-- Griffin: add richer anonymized case studies here. Each one: situation,
-what you built/ran, measurable outcome. Remember everything in this folder is
-publicly extractable via the chat. -->
