@@ -1116,6 +1116,7 @@
         const reader = r.body.getReader();
         const dec = new TextDecoder();
         let buf = '';
+        let sawDone = false;
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
@@ -1126,7 +1127,7 @@
             const line = ev.split('\n').find((l) => l.startsWith('data: '));
             if (!line) continue;
             const data = line.slice(6);
-            if (data === '[DONE]') continue;
+            if (data === '[DONE]') { sawDone = true; continue; }
             const payload = JSON.parse(data);
             if (payload.error) throw new Error(payload.error);
             answer += payload.text;
@@ -1134,6 +1135,9 @@
             el.scrollIntoView({ block: 'nearest' });
           }
         }
+        // A stream that ends without [DONE] was cut off — don't commit a
+        // truncated answer to history as if it were complete.
+        if (!sawDone) throw new Error('The answer was cut off — try asking again.');
         if (!answer) throw new Error('No response — try again.');
         history.push({ role: 'assistant', content: answer });
       } catch (e) {
