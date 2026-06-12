@@ -1,6 +1,6 @@
 ## About
 
-Griffin Sisk is a Senior Sales Engineer at CloudZero, where he runs technical
+Griffin Sisk is a Senior Solutions Engineer at CloudZero, where he runs technical
 evaluations and helps customers build cost models across cloud, Kubernetes, and
 AI spend. He has spent six years in technical pre-sales at VMware, Broadcom, and
 CloudZero — earning trust with engineering teams, articulating complex value to

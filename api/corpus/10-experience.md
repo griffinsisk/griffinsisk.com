@@ -1,6 +1,6 @@
 ## Experience
 
-**CloudZero — Senior Sales Engineer** (Sep 2024 – present; promoted to Senior
+**CloudZero — Senior Solutions Engineer** (Sep 2024 – present; promoted to Senior
 Feb 2026). Technical pre-sales at a cloud cost intelligence platform managing
 $14B+ in customer cloud spend. First SE hired for the Commercial segment —
 built the pre-sales motion from scratch, supporting $2.5M+ ARR across 50+ new
